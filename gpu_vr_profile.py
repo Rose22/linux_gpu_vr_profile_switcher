@@ -14,19 +14,19 @@ GPU_ID="card1"
 
 # normally this script automatically finds the VR power profile number,
 # but you can override it by setting this. leave it blank to use autodetect
-GPU_VR_PROFILE = None
+GPU_VR_PROFILE_OVERRIDE = None
 
 if len(sys.argv) <= 1:
     print("please specify either 'on' or 'off'")
     sys.exit(1)
 
 if sys.argv[1].lower() == "on":
-	# Enable manual override
+   # Enable manual override
     with open(f"/sys/class/drm/{GPU_ID}/device/power_dpm_force_performance_level", 'w') as f:
         f.write("manual")
 
-	# Translate "VR" into profile number
-    if not GPU_VR_PROFILE:
+    # Translate "VR" into profile number
+    if not GPU_VR_PROFILE_OVERRIDE:
       vr_profile = 0
       with open(f"/sys/class/drm/{GPU_ID}/device/pp_power_profile_mode", 'r') as f:
           vr_profiles_raw = f.read()
@@ -40,19 +40,19 @@ if sys.argv[1].lower() == "on":
       if vr_profile == 0:
           sys.exit(1)
     else:
-      vr_profile = GPU_VR_PROFILE
+      vr_profile = GPU_VR_PROFILE_OVERRIDE
 
-	# Set profile to VR
+    # Set profile to VR
     with open(f"/sys/class/drm/{GPU_ID}/device/pp_power_profile_mode", 'w') as f:
         f.write(vr_profile)
 
     print("VR power profile enabled")
 else:
-	# Disable manual override
+    # Disable manual override
     with open(f"/sys/class/drm/{GPU_ID}/device/power_dpm_force_performance_level", 'w') as f:
         f.write("auto")
 
-	# Set profile to DEFAULT
+    # Set profile to DEFAULT
     with open(f"/sys/class/drm/{GPU_ID}/device/pp_power_profile_mode", 'w') as f:
         f.write(str(GPU_PROFILE_DEFAULT))
 
