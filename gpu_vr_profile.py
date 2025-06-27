@@ -6,11 +6,12 @@
 import os
 import sys
 
-GPU_PROFILE_DEFAULT=0
-
 # the name of your GPU in /sys/class/drm/. this is usually either card0 or card1! but double check, just to be safe.
 # card0 is usually the internal GPU, card1 is usually the dedicated GPU.
 GPU_ID="card1"
+
+# ID of the profile your GPU should switch back to when turning off the VR profile
+GPU_PROFILE_DEFAULT=0
 
 # normally this script automatically finds the VR power profile number,
 # but you can override it by setting this. leave it blank to use autodetect
